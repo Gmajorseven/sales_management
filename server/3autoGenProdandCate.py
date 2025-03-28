@@ -12,7 +12,7 @@ def create_database():
     # Create product category table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Product_categories (
-            peoc_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            proc_id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL UNIQUE
         )
     ''')
@@ -77,9 +77,9 @@ def insert_products(n=50):
             for _ in range(n // len(category_map)):
                 name = random.choice(products)
                 price = round(random.uniform(5, 500), 2)
-                qty = random.randint(1, 100)
+                qty = random.randint(50, 100)
                 cursor.execute("INSERT INTO Products (name, price, unit, qty, category) VALUES (?, ?, ?, ?, ?)",
-                               (name, price, qty, unit, category_id))
+                               (name, price, unit, qty, category_id))
     
     conn.commit()
     conn.close()
