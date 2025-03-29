@@ -24,6 +24,8 @@ def create_database():
             Products_id INTEGER,
             buyed_qty INTEGER,
             status TEXT CHECK(status IN ('Pending', 'Completed')) NOT NULL DEFAULT 'Pending',
+            FOREIGN KEY (Sales_transaction_id) REFERENCES Sales_transaction (st_id),
+            FOREIGN KEY (Products_id) REFERENCES Products (pro_id),
             PRIMARY KEY (Sales_transaction_id, Products_id)
         )
     ''')
@@ -49,7 +51,7 @@ def insert_salingproducts(n=100):
     for i in range(1, n+1):
         st_id = i
         for j in range(random.randint(1, 5)):
-            pro_id = random.randint(1, 56)
+            pro_id = random.randint(1, 49)
             buyed_qty = random.randint(1, 3)
 
             cursor.execute("INSERT OR IGNORE INTO Saling_products (Sales_transaction_id, Products_id, buyed_qty) VALUES (?, ?, ?)", (st_id, pro_id, buyed_qty))
@@ -60,7 +62,7 @@ def insert_salingproducts(n=100):
 def main():
     create_database()
     insert_salestransaction(50)
-    insert_salingproducts()
+    insert_salingproducts(50)
     print("Database sales transaction and saling products records created successfully!")
 
 if __name__ == "__main__":

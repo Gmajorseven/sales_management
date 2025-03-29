@@ -43,7 +43,7 @@ def insert_product_categories(categories):
     conn.commit()
     conn.close()
 
-def insert_products(n=50):
+def insert_products(n=51):
     conn = sqlite3.connect("sales_management.db")
     cursor = conn.cursor()
     
@@ -88,7 +88,7 @@ def main():
     create_database()
     categories = ["Electronics", "Furniture", "Clothing", "Books", "Toys", "Kitchen Appliances", "Sports Equipment"]
     insert_product_categories(categories)
-    insert_products(50)
+    insert_products(51)
     print("Product database with meaningful categories and products created successfully!")
 
 if __name__ == "__main__":
