@@ -33,36 +33,47 @@ def create_database():
     conn.commit()
     conn.close()
 
-def insert_salestransaction(n=100):
-    conn = sqlite3.connect("sales_management.db")
-    cursor = conn.cursor()
-    for _ in range(n):
-        cus_id = random.randint(1, 100)
-        sp_id = random.randint(1, 10)
+def insert_salestransaction(n=50):
+    try:
+        conn = sqlite3.connect("sales_management.db")
+        cursor = conn.cursor()
+        for _ in range(n):
+            cus_id = random.randint(1, 100)
+            sp_id = random.randint(1, 10)
 
-        cursor.execute("INSERT INTO Sales_transaction (cus_id, sp_id) VALUES (?, ?)", (cus_id, sp_id))
+            cursor.execute("INSERT INTO Sales_transaction (cus_id, sp_id) VALUES (?, ?)", (cus_id, sp_id))
 
-    conn.commit()
-    conn.close()
+        conn.commit()
+        conn.close()
+    
+    except sqlite3.Error as e:
+        print("Error accessing database:", e)
 
-def insert_salingproducts(n=100):
-    conn = sqlite3.connect("sales_management.db")
-    cursor = conn.cursor()
-    for i in range(1, n+1):
-        st_id = i
-        for j in range(random.randint(1, 5)):
-            pro_id = random.randint(1, 49)
-            buyed_qty = random.randint(1, 3)
+def insert_salingproducts():
+    try:
+        conn = sqlite3.connect("sales_management.db")
+        cursor = conn.cursor()
 
-            cursor.execute("INSERT OR IGNORE INTO Saling_products (Sales_transaction_id, Products_id, buyed_qty) VALUES (?, ?, ?)", (st_id, pro_id, buyed_qty))
+        cursor.execute("SELECT st_id FROM Sales_transaction WHERE st_total IS NULL")
+        sts_id = [item[0] for item in cursor.fetchall()]
+        for i in range(len(sts_id)):
+            st_id = sts_id[i]
 
-    conn.commit()
-    conn.close()
+            for j in range(random.randint(1, 5)):
+                pro_id = random.randint(1, 49)
+                buyed_qty = random.randint(1, 3)
+
+                cursor.execute("INSERT OR IGNORE INTO Saling_products (Sales_transaction_id, Products_id, buyed_qty) VALUES (?, ?, ?)", (st_id, pro_id, buyed_qty))
+
+        conn.commit()
+        conn.close()
+    except sqlite3.Error as e:
+        print("Error accessing database:", e)
 
 def main():
     create_database()
     insert_salestransaction(50)
-    insert_salingproducts(50)
+    insert_salingproducts()
     print("Database sales transaction and saling products records created successfully!")
 
 if __name__ == "__main__":
